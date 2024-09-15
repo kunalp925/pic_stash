@@ -1,2 +1,2 @@
-# pic_stash
+# PicStash
 Allows users to store and share pics
