@@ -1,0 +1,27 @@
+services: 
+  sqldata:
+      image: mcr.microsoft.com/mssql/server:2022-latest
+      environment:
+        - SA_PASSWORD=Pass@word
+        - ACCEPT_EULA=Y
+      ports:
+        - "5434:1433"
+  sqldata.init:
+    image: mcr.microsoft.com/mssql-tools:latest
+    volumes:
+      - ./backend/SQL/InitScripts:/mssql-initdb
+    command: >
+      bash -c '
+      sleep 30s;
+      /opt/mssql-tools/bin/sqlcmd -S sqldata -U sa -P Pass@word -d master -i mssql-initdb/create_tables.sql;
+      echo "All done!";
+      '
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq/
