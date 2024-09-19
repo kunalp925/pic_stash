@@ -11,6 +11,8 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT;
 
+app.use(express.json());
+
 app.get('/', (req : Request, res : Response) => {
   res.send('PicStash Server');
 });
@@ -26,9 +28,9 @@ app.use('/user', userRouter);
 //   origin: 'http://example.com',
 //   optionsSuccessStatus: 200 
 // }
-
 // app.use(cors(corsOptions))
 
-app.listen(port, () => {
+app.listen(port, () =>
+{
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });

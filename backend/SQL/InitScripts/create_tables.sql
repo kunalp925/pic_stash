@@ -1,7 +1,6 @@
 CREATE LOGIN ApplicationUser WITH PASSWORD = 'Change_This_1';
 GO
 
-
 CREATE DATABASE PicStash;
 GO
 
@@ -16,29 +15,29 @@ END;
 GO
 
 CREATE TABLE Users (
-  ID INTEGER NOT NULL,
+  ID INTEGER NOT NULL IDENTITY,
   Username VARCHAR(100),
   PasswordHash VARCHAR(255),
-  CreatedAt TIMESTAMP,
+  CreatedAt VARCHAR(30) NOT NULL,
   PRIMARY KEY (ID)
 );
 GO
 
 CREATE TABLE Posts (
-  ID INTEGER,
+  ID INTEGER NOT NULL IDENTITY,
   Title VARCHAR, 
-  PathLocation TEXT,
-  UserId INTEGER,
-  Visible BIT,
-  CreatedAt TIMESTAMP,
+  PathLocation TEXT NOT NULL,
+  UserId INTEGER NOT NULL,
+  Visible BIT NOT NULL DEFAULT 0,
+  CreatedAt VARCHAR(30) NOT NULL,
   PRIMARY KEY (ID),
   FOREIGN KEY (UserId) REFERENCES Users(ID)
 );
 GO
 
 CREATE TABLE Metadata (
-    ID INTEGER,
-    PostId INTEGER,
+    ID INTEGER NOT NULL IDENTITY,
+    PostId INTEGER NOT NULL,
     CameraType VARCHAR,
     PicLocation TEXT,
     PRIMARY KEY (ID),
@@ -47,8 +46,8 @@ CREATE TABLE Metadata (
 GO
 
 CREATE TABLE Tags (
-    ID INTEGER,
-    PostId INTEGER,
+    ID INTEGER NOT NULL IDENTITY,
+    PostId INTEGER NOT NULL,
     Tag TEXT,
     PRIMARY KEY (ID),
     FOREIGN KEY (PostId) REFERENCES Posts(ID)
