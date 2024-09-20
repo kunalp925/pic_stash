@@ -1,2 +1,4 @@
 # PicStash
-Allows users to store and share pics
+Allows users to store pics.
+
+Eventually can add sharing capabilities.
