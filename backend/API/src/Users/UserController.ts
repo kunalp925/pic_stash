@@ -1,9 +1,10 @@
 import { Request, Response, Router } from "express";
 
-import { User } from "../Models/UserModel";
-import { generateSQLDateTime } from "../Clients/sql-client";
-import { insertUser } from "./UserService";
-import { hashPassword } from "./UserHelpers";
+import {
+    createUser,
+    doesUserExist,
+    verifyUser
+} from "./UserService";
 
 export const userRouter = Router();
 
@@ -22,24 +23,15 @@ userRouter.post('/register', async (req : Request, res : Response) => {
             res.status(400).json({message: 'Invalid format for username/password'});
         }
 
-        // const existingUser = await user.findOne({ email: req.body.email });
-        // if (existingUser) {
-        //   return res.status(400).json({ error: 'Email already exists' });
-        // }
+        // check if user exists
+        const existingUser = await doesUserExist(username);
+        if (existingUser) {
+          return res.status(400).json({ error: 'Username already exists' });
+        }
 
- 
-        // Hashing user's salt and password with 1000 iterations
-        let hashedPassword = hashPassword(req.body.password)
+        // insert user
+        const insertRes = await createUser(username, password);
 
-        // Create a new user
-        const user = new User(
-            undefined,
-            req.body.username,
-            hashedPassword,
-            generateSQLDateTime()
-        );
-        
-        let insertRes = await insertUser(user);
         if(insertRes)
         {
             res.status(201).json({ message: 'User registered successfully' });
@@ -47,6 +39,42 @@ userRouter.post('/register', async (req : Request, res : Response) => {
         else
         {
             res.status(500).json({message: 'Unable to register user'});
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+userRouter.post('/login', async (req : Request, res : Response) => {
+    try {
+
+        let username = req.body.username;
+        let password = req.body.password;
+
+        if (username == undefined || password == undefined)
+        {
+            res.status(401).json({ message: 'Invalid User' });
+        }
+
+        // check if user exists
+        const existingUser = await doesUserExist(username);
+        if (!existingUser) {
+          return res.status(401).json({ message: 'Invalid User' });
+        }
+
+        // verification
+        const userVerification = await verifyUser(username, password);
+        const isUserVerified = userVerification[0];
+        const token = userVerification[1];
+        console.log(isUserVerified);
+
+        if(isUserVerified)
+        {
+            res.status(200).json({ token: token });
+        }
+        else
+        {
+            res.status(401).json({message: 'Invalid user'});
         }
     } catch (error) {
         res.status(500).json({ error: 'Internal server error' });

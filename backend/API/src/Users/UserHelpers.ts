@@ -1,9 +1,23 @@
-import crypto from 'crypto';
+import { User } from '../Models/UserModel';
+import { IRecordSet } from 'mssql';
 
-export var hashPassword = (password : string) =>
+export var convertRecordToUserList = (list : IRecordSet<any> | undefined) => 
 {
-    let salt = crypto.randomBytes(16).toString('hex');
+    let userList = new Array<User>();
 
-    return crypto.pbkdf2Sync(password, salt,
-        1000, 64, `sha256`).toString(`hex`);
+    if(list == undefined)
+    {
+        return userList;
+    }
+
+    list.forEach(element => {
+        userList.push(convertJsonToUser(element));
+    });
+
+    return userList;
+}
+
+var convertJsonToUser = (obj : any) : User =>
+{
+    return new User (obj.ID, obj.Username, obj.PasswordHash, obj.CreatedAt);
 }

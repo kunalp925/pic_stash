@@ -3,7 +3,7 @@ import sql, { IResult } from 'mssql';
 
 // Storing here for now but configs should remain in another folder and sensitive information should be stored in keyvault
 let config = {
-    "user": "ApplicationUser",
+    "user": "ApplicationUser", // user set up during sql init setup
     "password": "Change_This_1",
     "server": "localhost",
     "port":5434,
