@@ -1,4 +1,6 @@
 // index.ts - entrypoint
+
+// npm package imports
 import cors from 'cors';
 import dotenv from 'dotenv';
 import 'reflect-metadata';
@@ -6,11 +8,14 @@ import express, { Request, Response } from 'express';
 import { Container } from 'inversify';
 import { InversifyExpressServer } from 'inversify-express-utils';
 
-import './Users/UserController';
+// service imports
 import SQLClient from './Clients/sql-client';
 import UserService from './Users/UserService';
 
+// Controller imports
+import './Users/UserController';
 
+// container + server setup
 const container = new Container(); 
 
 container.bind(UserService).toSelf();
@@ -23,6 +28,7 @@ server.setConfig((app) => {
   app.use(express.json());
 });
 
+// running server
 const app = server.build();
 const port = process.env.PORT;
 

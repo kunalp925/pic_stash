@@ -38,7 +38,6 @@ export default class UserService
         password: string)
     {
         const hashedPassword = await hashPassword(password);
-        console.log(hashedPassword);
 
         // Create a new user
         const user = new User(
@@ -70,7 +69,6 @@ export default class UserService
 
         if (validPassword)
         {
-            console.log("found");
             return [true, 'token']
         }
         

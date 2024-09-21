@@ -25,7 +25,7 @@ export default class SQLClient
                 throw err;
             }
         
-            console.log("Connection Successful!");
+            console.log("SQL Connection Successful!");
         });
     }
     

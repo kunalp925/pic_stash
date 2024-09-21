@@ -83,7 +83,6 @@ export class UserController
             const userVerification = await this._userService.VerifyUser(username, password);
             const isUserVerified = userVerification[0];
             const token = userVerification[1];
-            console.log(isUserVerified);
 
             if(isUserVerified)
             {
