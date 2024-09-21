@@ -9,11 +9,11 @@ import { Container } from 'inversify';
 import { InversifyExpressServer } from 'inversify-express-utils';
 
 // service imports
-import SQLClient from './Clients/sql-client';
-import UserService from './Users/UserService';
+import SQLClient from './clients/sql-client';
+import UserService from './services/UserService';
 
 // Controller imports
-import './Users/UserController';
+import './controllers/UserController';
 
 // container + server setup
 const container = new Container(); 
