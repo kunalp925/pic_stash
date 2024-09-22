@@ -1,7 +1,21 @@
-import { Request, Response, Router } from "express";
+import express from "express";
+import { 
+    HttpResponseMessage,
+    StringContent,
+    controller,
+    httpGet,
+} from "inversify-express-utils";
 
-export const picsRouter = Router();
+@controller('/pics')
+export class PicsController
+{
+    constructor(){}
 
-picsRouter.get('/', (req : Request, res : Response) => {
-    res.send('Pics Endpoints');
-});
+    @httpGet('/')
+    TestRoute()
+    {
+        const response = new HttpResponseMessage(200);
+        response.content = new StringContent("Pics Endpoints");
+        return response;
+    }
+}

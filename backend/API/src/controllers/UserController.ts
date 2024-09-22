@@ -1,7 +1,15 @@
 import express from "express";
+import { 
+    HttpResponseMessage,
+    StringContent,
+    controller,
+    httpGet,
+    httpMethod,
+    request,
+    response
+} from "inversify-express-utils";
 
 import UserService from "../services/UserService";
-import { HttpResponseMessage, StringContent, controller, httpGet, httpMethod, request, response } from "inversify-express-utils";
 
 @controller('/user')
 export class UserController

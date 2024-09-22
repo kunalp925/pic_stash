@@ -1,6 +1,7 @@
 
 import { injectable } from 'inversify';
 import sql, { IResult } from 'mssql';
+import { RetrieveEnvVars } from '../helpers/ConfigHelper';
 
 @injectable()
 export default class SQLClient
@@ -9,13 +10,13 @@ export default class SQLClient
     {
         const env = process?.env;
         const SQLConfig = {
-            user: "ApplicationUser",
-            password: "Change_This_1",
-            server: "localhost",
-            port: 5434,
-            database: "PicStash",
+            user: <string>RetrieveEnvVars("SQL_USER", "defaultVal"),
+            password: <string>RetrieveEnvVars("SQL_PASSWORD", "password"),
+            server: <string>RetrieveEnvVars("SQL_HOST", "localhost"),
+            port: <number>RetrieveEnvVars("SQL_PORT", 1433),
+            database: <string>RetrieveEnvVars("SQL_DATABASE", "database"),
             options: {
-                trustServerCertificate: true
+                trustServerCertificate: <boolean>RetrieveEnvVars("SQL_TRUSTSERVERCERT", false)
             }
         }
 
