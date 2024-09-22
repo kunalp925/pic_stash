@@ -1,24 +1,36 @@
 // index.ts - entrypoint
+
+// npm package imports
 import cors from 'cors';
 import dotenv from 'dotenv';
+import 'reflect-metadata';
 import express, { Request, Response } from 'express';
+import { Container } from 'inversify';
+import { InversifyExpressServer } from 'inversify-express-utils';
 
-import { authRouter } from "./Auth/AuthController";
-import { userRouter } from "./Users/UserController";
+// service imports
+import SQLClient from './clients/sql-client';
+import UserService from './services/UserService';
 
-dotenv.config();
+// Controller imports
+import './controllers/UserController';
 
-const app = express();
-const port = process.env.PORT;
+// container + server setup
+const container = new Container(); 
 
-app.use(express.json());
+container.bind(UserService).toSelf();
+container.bind(SQLClient).toSelf();
 
-app.get('/', (req : Request, res : Response) => {
-  res.send('PicStash Server');
+const server = new InversifyExpressServer(container);
+
+server.setConfig((app) => {
+  dotenv.config();
+  app.use(express.json());
 });
 
-app.use('/auth', authRouter);
-app.use('/user', userRouter);
+// running server
+const app = server.build();
+const port = process.env.PORT;
 
 /**
  * If you would like to enable cors and specify the origins

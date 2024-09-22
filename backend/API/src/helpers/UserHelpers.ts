@@ -1,4 +1,4 @@
-import { User } from '../Models/UserModel';
+import { User } from '../models/UserModel';
 import { IRecordSet } from 'mssql';
 
 export var convertRecordToUserList = (list : IRecordSet<any> | undefined) => 
